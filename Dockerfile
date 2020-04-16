@@ -1,20 +1,26 @@
-FROM golang:latest
-
-# working directory on the container
+#  latest golang image. builder is alias
+FROM golang:alpine as builder
+# install git
+RUN apk update && apk add --no-cache git
+#set working directory on container
 WORKDIR /app
-
-# copy go.mod and go.sum files from your machine to container path 
+# copy go.mod go.sum files from local to container
 COPY go.mod go.sum ./
-
-# download all the dependencies. 
+# downloads all the dependencies
 RUN go mod download
-
-# copy everything from source(local machine) to destination ( container working directory)
+# copy source from local to working directory on container
 COPY . .
+# build the app. After building the app executable is stored in main ( -o main)
+# go help build will give more details about each parameters
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-# go build will compile and build the files. -o means output. 
-# the below command will build and generate the executable by the name of "main" and place it in container working directory
-RUN go build -o main .
+#next stage#
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+
+# copy the pre-built binary from 1st/previous stage
+COPY --from=builder /app/main .
 
 # run the executable. User either CMD or ENTRYPOINT
 ENTRYPOINT ["./main"]
