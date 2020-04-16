@@ -1,5 +1,5 @@
-# go-crud
-crud application in go
+# go-crud with postgres
+crud application in go. It connects to postgres database
 
 #Helpfule Docker commands
 # build docker image 
