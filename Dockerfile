@@ -21,6 +21,7 @@ WORKDIR /root/
 
 # copy the pre-built binary from 1st/previous stage
 COPY --from=builder /app/main .
+COPY --from=builder /app/.env .
 
 # run the executable. User either CMD or ENTRYPOINT
 ENTRYPOINT ["./main"]
