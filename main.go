@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,23 +12,26 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/vamshi/go-crud/repository"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query()
-	name := query.Get("name")
-	if name == "" {
-		name = "Guest"
-	}
-	log.Printf("Received request for %s\n", name)
-	w.Write([]byte(fmt.Sprintf("Hello, %s\n", name)))
+
+func userHandler(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	
+	log.Print(path)
+	users := repository.GetUserData()
+	// set response type as json
+	w.Header().Set("Content-Type","application/json")
+	//converting the users slice to json
+	json.NewEncoder(w).Encode(users)
 }
 
 func main() {
 	// Create Server and Route Handlers
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", handler)
+	r.HandleFunc("/users",userHandler)
 
 	srv := &http.Server{
 		Handler:      r,
