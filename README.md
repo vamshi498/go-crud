@@ -34,6 +34,6 @@ For ex you want to kill PID of a service which is using 8080
 ps -aux | grep 8080 --> this will give you PID.  After this do kill -9 PID
 
 # docker compose 
-docker-compose up  (builds and runs the stack) \n
+docker-compose up  (builds and runs the stack).
 docker-compose down ( stops the services)
 docker-compose up --build ( rebuilds the stack and then starts the services)
