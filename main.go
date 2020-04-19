@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -40,6 +39,11 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
+	err := repository.MigrateDb()
+
+	if err != nil {
+		log.Fatalf("Unable to perform db migration %v",err)
+	}
 	// Start Server
 	go func() {
 		log.Println("Starting Server")
