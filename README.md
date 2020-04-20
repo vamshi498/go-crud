@@ -37,3 +37,6 @@ ps -aux | grep 8080 --> this will give you PID.  After this do kill -9 PID
 1.docker-compose up  (builds and runs the stack)  
 2.docker-compose down ( stops the services)  
 3.docker-compose up --build ( rebuilds the stack and then starts the services)  
+
+# get details about docker container like IPAddress, config etc
+docker inspect containerId
