@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file" // required
+	_ "github.com/golang-migrate/migrate/v4/source/file" // required. 
 )
 
 const (
@@ -44,6 +44,7 @@ func MigrateDb() error {
 	if err != nil {
 		log.Fatalf("could not start database. Error is  %v",err)
 	}
+	// make sure you import the file dependency. If not file:// won't work
 	mPath := fmt.Sprintf("file://%s", migrationDir)
 	log.Printf("path of migration directory is %s",mPath)
 	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s", migrationDir),"postgres",driver)

@@ -11,12 +11,13 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/vamshi/go-crud/model"
 	"github.com/vamshi/go-crud/repository"
 )
 
 
-func userHandler(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+func userHandler(w http.ResponseWriter, req *http.Request) {
+	path := req.URL.Path
 	
 	log.Print(path)
 	users := repository.GetUserData()
@@ -26,12 +27,28 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
+func addUserHandler(w http.ResponseWriter,req *http.Request){
+	path := req.URL.Path
+	log.Printf("path is %v",path)
+
+	decoder := json.NewDecoder(req.Body)
+
+	var user model.User
+	// decode the data and assign it to model.User type
+	err := decoder.Decode(&user)
+
+	if err != nil {
+		log.Fatalf("unable to decode body %v",err)
+	}
+
+	repository.InsertRecord(user)
+	log.Printf("Inserted record is %+v",user)
+
+}
 func main() {
-	// Create Server and Route Handlers
-	r := mux.NewRouter()
-
-	r.HandleFunc("/users",userHandler)
-
+		// Create Server and Route Handlers
+		r := mux.NewRouter()
+		
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":8080",
@@ -51,6 +68,12 @@ func main() {
 			log.Fatal(err)
 		}
 	}()
+
+
+
+	//TODO . Will userHandler() work instead of userHandler
+	r.HandleFunc("/users",userHandler)
+	r.HandleFunc("/addUser", addUserHandler)
 
 	// Graceful Shutdown
 	waitForShutdown(srv)
