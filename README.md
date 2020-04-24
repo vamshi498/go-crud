@@ -9,9 +9,10 @@ Ex:
 # retreive data using /users/{id} endpoint 
 Ex:  
 ```curl http://localhost:8080/users/1 ```  
-Response for above curl would look like  
 
+Response for above curl would look like  
 ``` {"Firstname":"Muthyapu","Lastname":"","Address":{"City":"","State":"","Country":""}} ```  
+
 # db migration
 To perform db migrations using golang-migrate , we need to have two files
 1. 01_first_migration.up.sql
