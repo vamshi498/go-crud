@@ -2,6 +2,9 @@
 crud application in go. It connects to postgres database
 We are using golang-migrate https://github.com/golang-migrate/migrate to perform db migrations
 
+# start the container and run the application 
+docker-compose up  
+
 # insert data using /addUser endpoint
 Ex:  
 ``` curl -XPOST -H "Content-type: application/json" -d '{"firstname":"Vamshi","lastname":"Muthyapu"}' 'http://localhost:8080/addUser' ```  
