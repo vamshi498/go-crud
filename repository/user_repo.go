@@ -8,37 +8,28 @@ import (
 	"github.com/vamshi/go-crud/model"
 )
 
-// GetUserData gets user data.
-func GetUserData() []model.User{
+// GetUserData gets user data for a given id.
+func GetUserData(id int) model.User{
+	connString := `postgres://steven:password@fullstack-postgres:5432/fullstack_api`
+	conn, err := pgx.Connect(context.Background(),connString)
 
-
-
-	// create a user slice
-	users := make([]model.User,0)
-
-	user1 := model.User{
-		Firstname : "Vamshi",
-		Lastname: "Muthyapu",
-		Address: model.Address{
-			City: "some city",
-			State: "some state",
-		},
-
+	if err != nil {
+		log.Fatalf("error connecting to postgres using pgx. Error: %v",err)
 	}
 
-	user2 := model.User{
-		Firstname : "James",
-		Lastname: "Bond",
-		Address: model.Address{
-			City: "london",
-			Country: "UK",
-		},
+	defer conn.Close(context.Background())
 
+	var user model.User
+
+	err = conn.QueryRow(context.Background(),`select firstname, lastname from public.user where id = $1;`,id).
+	Scan(&user.Firstname,&user.Firstname)
+
+	if err != nil {
+		log.Fatal("error retreiving data from postgres db")
 	}
+
+	return user
 	
-	// append users to slice
-	users = append(users,user1,user2)
-	return users
 
 }
 

@@ -2,6 +2,14 @@
 crud application in go. It connects to postgres database
 We are using golang-migrate https://github.com/golang-migrate/migrate to perform db migrations
 
+# insert data using /addUser endpoint
+Ex: ``` curl -XPOST -H "Content-type: application/json" -d '{"firstname":"Vamshi","lastname":"Muthyapu"}' 'http://localhost:8080/addUser' ```
+
+# retreive data using /users/{id} endpoint 
+Ex : ```curl http://localhost:8080/users/1 ```
+Response for above curl would look like 
+
+``` {"Firstname":"Muthyapu","Lastname":"","Address":{"City":"","State":"","Country":""}} ```
 #db migration
 To perform db migrations using golang-migrate , we need to have two files
 1. 01_first_migration.up.sql

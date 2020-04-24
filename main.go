@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -20,11 +22,21 @@ func userHandler(w http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
 	
 	log.Print(path)
-	users := repository.GetUserData()
+	vars := mux.Vars(req)
+	// retreive the id from the input request
+	id := vars["id"]
+
+	i,err := strconv.Atoi(id)
+
+	log.Print(id)
+	if err != nil {
+		fmt.Printf("unable to convert id:%v to int",id)
+	}
+	user := repository.GetUserData(i)
 	// set response type as json
 	w.Header().Set("Content-Type","application/json")
 	//converting the users slice to json
-	json.NewEncoder(w).Encode(users)
+	json.NewEncoder(w).Encode(user)
 }
 
 func addUserHandler(w http.ResponseWriter,req *http.Request){
@@ -71,8 +83,8 @@ func main() {
 
 
 
-	//TODO . Will userHandler() work instead of userHandler
-	r.HandleFunc("/users",userHandler)
+	//TODO . Will userHandler() with brace. work instead of userHandler
+	r.HandleFunc("/users/{id:[0-9]+}",userHandler)
 	r.HandleFunc("/addUser", addUserHandler)
 
 	// Graceful Shutdown
