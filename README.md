@@ -3,7 +3,7 @@ crud application in go. It connects to postgres database
 We are using golang-migrate https://github.com/golang-migrate/migrate to perform db migrations
 
 # start the container and run the application 
-docker-compose up  
+```docker-compose up```  
 
 # insert data using /addUser endpoint
 Ex:  
